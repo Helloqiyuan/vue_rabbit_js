@@ -1,18 +1,8 @@
 <script setup>
 import {onMounted, ref} from 'vue'
-import {getAllCategory} from '@/apis/layout'
-const categoryData = ref([])
-/*
-  获取一级分类的数据
- */
-const getCategoryData = async ()=>{
-  const res = await getAllCategory()
-  categoryData.value = res.result
-  // console.log(res);
-}
-onMounted(()=>{
-  getCategoryData()
-})
+// 从pinia中获取分类数据
+import {useCategoryStore} from '@/stores/category'
+const store = useCategoryStore()
 </script>
 
 <template>
@@ -25,7 +15,7 @@ onMounted(()=>{
         <li class="home">
           <RouterLink to="/">首页</RouterLink>
         </li>
-        <li v-for="e in categoryData" :key="e.id">
+        <li v-for="e in store.globalCategoryData" :key="e.id">
           <RouterLink to="/">{{ e.name }}</RouterLink>
         </li>
       </ul>
