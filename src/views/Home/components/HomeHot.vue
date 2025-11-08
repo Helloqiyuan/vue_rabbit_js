@@ -6,7 +6,6 @@ const hotData = ref([])
 const getHotData = async () => {
   const res = await getHotApi()
   hotData.value = res.result
-  console.log(hotData.value);
 }
 onMounted(() => {
   getHotData()
