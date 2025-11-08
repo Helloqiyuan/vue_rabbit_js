@@ -17,3 +17,8 @@ export const getHotApi =()=>{
     url:'/home/hot'
   })
 }
+export const getGoodsApi = ()=>{
+  return httpInstance({
+    url:'/home/goods'
+  })
+}
