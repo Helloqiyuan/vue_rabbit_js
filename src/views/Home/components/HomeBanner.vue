@@ -5,7 +5,6 @@ const swiperData = ref([])
 const getSwiperData = async ()=>{
   const res = await getAllSwiperApi()
   swiperData.value = res.result
-  console.log(res);
 }
 onMounted(()=>{
   getSwiperData()
