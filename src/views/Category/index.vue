@@ -1,18 +1,32 @@
 <script setup>
-import { onMounted, onUpdated, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 import { getCategoryApi } from '@/apis/category';
+// 使用pinia缓存的数据
+// import { useCategoryStore } from '@/stores/category';
+import { getAllSwiperApi } from '@/apis/home';
 const categoryData = ref({})
+const swiperData = ref([])
 const props = defineProps(['id'])
 
 const getCategoryData = async (id) => {
   const res = await getCategoryApi(id)
   categoryData.value = res.result
-  console.log("@",categoryData.value);
+  // categoryData.value = useCategoryStore().globalCategoryData.filter(e => e.id === id)[0]
+  console.log("@", categoryData.value);
 }
-onUpdated(() => {
-  getCategoryData(props.id)
+const getSwiperData = async () => {
+  // 广告区域展示位置（投放位置 投放位置，1为首页，2为分类商品页） 默认是1
+  const res = await getAllSwiperApi(2)
+  swiperData.value = res.result
+}
+watch(() => props.id, (newValue) => {
+  getCategoryData(newValue)
+  getSwiperData()
 })
-// console.log(props);
+onMounted(() => {
+  getCategoryData(props.id)
+  getSwiperData()
+})
 </script>
 
 <template>
@@ -26,6 +40,13 @@ onUpdated(() => {
         </el-breadcrumb>
       </div>
     </div>
+  </div>
+  <div class="home-banner">
+    <el-carousel height="500px">
+      <el-carousel-item v-for="item in swiperData" :key="item.id">
+        <img :src="item.imgUrl" alt="轮播图图片">
+      </el-carousel-item>
+    </el-carousel>
   </div>
 </template>
 
@@ -106,6 +127,17 @@ onUpdated(() => {
 
   .bread-container {
     padding: 25px 0;
+  }
+}
+
+.home-banner {
+  width: 1240px;
+  height: 500px;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
