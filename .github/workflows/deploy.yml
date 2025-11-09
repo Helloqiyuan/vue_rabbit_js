@@ -1,0 +1,36 @@
+name: Deploy to Windows Nginx
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, windows]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Clear old files
+        run: |
+          if (Test-Path "C:\Users\Administrator\Desktop\nginx-1.29.1\html\dist") {
+            Remove-Item "C:\Users\Administrator\Desktop\nginx-1.29.1\html\dist\*" -Recurse -Force
+          } else {
+            New-Item -ItemType Directory -Path "C:\Users\Administrator\Desktop\nginx-1.29.1\html\dist"
+          }
+
+      - name: Copy build files to Nginx
+        run: Copy-Item -Path "dist\*" -Destination "C:\Users\Administrator\Desktop\nginx-1.29.1\html\dist" -Recurse
