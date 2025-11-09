@@ -5,6 +5,7 @@ import { getCategoryApi } from '@/apis/category';
 // import { useCategoryStore } from '@/stores/category';
 import { getAllSwiperApi } from '@/apis/home';
 import GoodsItem from '../Home/components/GoodsItem.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 const categoryData = ref({})
 const swiperData = ref([])
 const props = defineProps(['id'])
@@ -20,9 +21,20 @@ const getSwiperData = async () => {
   const res = await getAllSwiperApi(2)
   swiperData.value = res.result
 }
-watch(() => props.id, (newValue) => {
-  getCategoryData(newValue)
-  getSwiperData()
+/*
+  路由切换数据更新方法一(我的解决方案)
+  watch(() => props.id, (newValue) => {
+    getCategoryData(newValue)
+    getSwiperData()
+  })
+*/
+/*
+  老师的方法(onBeforeRouteUpdate)
+*/
+onBeforeRouteUpdate((to)=>{
+  // 这个to是指即将更新到的路由
+  getCategoryData(to.params.id)
+  // 因为轮播图数据是一样的所以不请求轮播图数据
 })
 onMounted(() => {
   getCategoryData(props.id)
