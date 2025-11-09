@@ -4,6 +4,7 @@ import { getCategoryApi } from '@/apis/category';
 // 使用pinia缓存的数据
 // import { useCategoryStore } from '@/stores/category';
 import { getAllSwiperApi } from '@/apis/home';
+import GoodsItem from '../Home/components/GoodsItem.vue';
 const categoryData = ref({})
 const swiperData = ref([])
 const props = defineProps(['id'])
@@ -12,7 +13,7 @@ const getCategoryData = async (id) => {
   const res = await getCategoryApi(id)
   categoryData.value = res.result
   // categoryData.value = useCategoryStore().globalCategoryData.filter(e => e.id === id)[0]
-  console.log("@", categoryData.value);
+  // console.log("@", categoryData.value);
 }
 const getSwiperData = async () => {
   // 广告区域展示位置（投放位置 投放位置，1为首页，2为分类商品页） 默认是1
@@ -39,14 +40,33 @@ onMounted(() => {
           <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in swiperData" :key="item.id">
+            <img :src="item.imgUrl" alt="轮播图图片">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="home-banner">
-    <el-carousel height="500px">
-      <el-carousel-item v-for="item in swiperData" :key="item.id">
-        <img :src="item.imgUrl" alt="轮播图图片">
-      </el-carousel-item>
-    </el-carousel>
   </div>
 </template>
 

@@ -16,7 +16,7 @@ const categoryStore = useCategoryStore()
           <RouterLink to="/">首页</RouterLink>
         </li>
         <li v-for="e in categoryStore.globalCategoryData" :key="e.id">
-          <RouterLink :to="{
+          <RouterLink active-class="active" :to="{
             name: 'category',
             params: {
               id: e.id
