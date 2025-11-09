@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: "/",
       name: "layout",
-      redirect:"/home",
+      redirect: "/home",
       component: Layout,
       children: [
         {
@@ -24,6 +24,11 @@ const router = createRouter({
           path: "/category/:id",
           name: "category",
           component: Category,
+          /*
+            使得路径参数id能让子组件通过defineProps获得，
+            不写这个就需要获取useRoute去拿到params再获取到id
+          */
+          props: true,
         },
       ],
     },
