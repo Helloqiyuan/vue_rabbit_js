@@ -6,6 +6,7 @@ import Layout from "@/views/Layout/index.vue";
 import Home from "@/views/Home/index.vue";
 import Category from "@/views/Category/index.vue";
 import SubCategory from "@/views/SubCategory/index.vue";
+import Detail from "@/views/Detail/index.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -36,6 +37,11 @@ const router = createRouter({
           component: SubCategory,
           props: true,
         },
+        {
+          path: "detail/:id",
+          name: "datail",
+          component: Detail,
+        },
       ],
     },
     {
@@ -44,10 +50,15 @@ const router = createRouter({
       component: Login,
     },
   ],
-  scrollBehavior() {
-    return {
-      top: 0,
-    };
+  scrollBehavior(to, from, savedPosition) {
+    // 在按下 后退/前进 按钮时不会滚动到顶部
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return {
+        top: 0,
+      };
+    }
   },
 });
 
