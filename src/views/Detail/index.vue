@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getGoodDetailApi } from '@/apis/detail';
-import { onBeforeRouteUpdate } from 'vue-router';
+import HotDetail from './components/HotDetail.vue';
 const goodDetailData = ref({})
 const props = defineProps(["id"])
 const getGoodDetailData = async (id) => {
@@ -56,9 +56,9 @@ onMounted(() => {
                   <p>{{ goodDetailData.collectCount }}+</p>
                   <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
                 </li>
-                <li>
+                <li v-if="goodDetailData.brand">
                   <p>品牌信息</p>
-                  <p>{{ goodDetailData.brand.name }}</p>
+                  <p>{{ goodDetailData.brand.name}}</p>
                   <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
                 </li>
               </ul>
@@ -109,18 +109,20 @@ onMounted(() => {
                 <div class="goods-detail">
                   <!-- 属性 -->
                   <ul class="attrs">
-                    <li v-for="item in goodDetailData.details.properties" :key="item.value">
+                    <li v-for="item in goodDetailData.details?.properties" :key="item.value">
                       <span class="dt">{{ item.name }}</span>
                       <span class="dd">{{ item.value }}</span>
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="(pictrue,index) in goodDetailData.details.pictures" :src="pictrue" :key="index"  alt="">
+                  <img v-for="(pictrue,index) in goodDetailData.details?.pictures" v-img-lazy="pictrue" :key="index"  alt="">
                 </div>
               </div>
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
+              <HotDetail :id="props.id" :type="1"/>
+              <HotDetail :id="props.id" :type="2"/>
 
             </div>
           </div>
