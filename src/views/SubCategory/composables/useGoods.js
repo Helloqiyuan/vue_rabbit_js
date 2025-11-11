@@ -5,13 +5,13 @@ export const useGoods = (reqParams) => {
   const GoodsData = ref([]);
   const getGoodsData = async (params) => {
     const res = await getGoodsApi(params);
-    GoodsData.value = [...GoodsData.value,...res.result.items];
+    GoodsData.value = res.result.items;
   };
   onMounted(() => {
     getGoodsData(reqParams.value);
   });
   return {
     GoodsData,
-    getGoodsData
+    getGoodsData,
   };
 };
