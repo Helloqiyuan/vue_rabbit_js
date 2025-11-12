@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { getGoodDetailApi } from '@/apis/detail';
 import HotDetail from './components/HotDetail.vue';
 import ImageView from '@/components/ImageView/index.vue'
+import XtxSku from '@/components/XtxSku/index.vue'
 const goodDetailData = ref({})
 const props = defineProps(["id"])
 const getGoodDetailData = async (id) => {
@@ -10,7 +11,9 @@ const getGoodDetailData = async (id) => {
   goodDetailData.value = res.result
   console.log(goodDetailData.value);
 }
-
+const handleSkuChange = (sku)=>{
+  console.log(sku);
+}
 
 onMounted(() => {
   getGoodDetailData(props.id)
@@ -89,7 +92,7 @@ onMounted(() => {
                 </dl>
               </div>
               <!-- sku组件 -->
-
+               <XtxSku :goods="goodDetailData" @change="handleSkuChange"/>
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->
