@@ -1,16 +1,30 @@
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 const form = ref({
-  account:'',
-  password:''
+  account: '',
+  password: '',
+  agree: false
 })
 const rules = ref({
-  account:[
-    {required:true,message:"用户名不能为空",trigger:'blur'}
+  account: [
+    { required: true, message: "用户名不能为空", trigger: 'blur' }
   ],
-  password:[
-    {required:true,message:"密码不能为空",trigger:'blur'},
-    {min:6,max:14,message:"密码长度为6-14个字符",trigger:'blur'}
+  password: [
+    { required: true, message: "密码不能为空", trigger: 'blur' },
+    { min: 6, max: 14, message: "密码长度为6-14个字符", trigger: 'blur' }
+  ],
+  agree: [
+    {
+      validator: (rule, value, callback) => {
+        console.log(value);
+        if (value) {
+          callback()
+        } else {
+          callback(new Error('请同意隐私条款和服务条款'))
+        }
+      },
+      trigger: 'change'
+    }
   ]
 })
 </script>
@@ -42,10 +56,10 @@ const rules = ref({
                 <el-input v-model="form.account" />
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input v-model="form.password"/>
+                <el-input v-model="form.password" />
               </el-form-item>
-              <el-form-item label-width="22px">
-                <el-checkbox size="large">
+              <el-form-item label-width="22px" prop="agree">
+                <el-checkbox v-model="form.agree" size="large">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
