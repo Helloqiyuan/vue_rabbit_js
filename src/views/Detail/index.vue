@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getGoodDetailApi } from '@/apis/detail';
 import HotDetail from './components/HotDetail.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 const goodDetailData = ref({})
 const props = defineProps(["id"])
 const getGoodDetailData = async (id) => {
@@ -12,7 +13,10 @@ const getGoodDetailData = async (id) => {
 const handleSkuChange = (sku)=>{
   console.log(sku);
 }
-
+onBeforeRouteUpdate((to)=>{
+  console.log(to);
+  getGoodDetailData(to.params.id)
+})
 onMounted(() => {
   getGoodDetailData(props.id)
 })

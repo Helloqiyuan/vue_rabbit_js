@@ -11,11 +11,11 @@ const { y } = useScroll(window)
 <template>
   <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
-      <RouterLink class="logo" to="/" />
+      <RouterLink class="logo" to="/home" />
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
         <li class="home">
-          <RouterLink to="/">首页</RouterLink>
+          <RouterLink to="/home">首页</RouterLink>
         </li>
         <li v-for="e in categoryStore.globalCategoryData" :key="e.id">
           <RouterLink :to="{

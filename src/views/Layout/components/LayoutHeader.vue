@@ -9,11 +9,11 @@ const categoryStore = useCategoryStore()
   <header class='app-header'>
     <div class="container">
       <h1 class="logo">
-        <RouterLink to="/">小兔鲜</RouterLink>
+        <RouterLink to="/home">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
         <li class="home">
-          <RouterLink to="/">首页</RouterLink>
+          <RouterLink to="/home">首页</RouterLink>
         </li>
         <li v-for="e in categoryStore.globalCategoryData" :key="e.id">
           <RouterLink active-class="active" :to="{
