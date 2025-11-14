@@ -31,7 +31,7 @@ const addToCart = () => {
     cartStore.addCart({
       id: goodDetailData.value.id,
       name: goodDetailData.value.name,
-      pictrue: goodDetailData.value.mainPictures[0],
+      picture: goodDetailData.value.mainPictures[0],
       price: goodDetailData.value.price,
       count: count.value,
       skuId: skuObj.value.skuId,

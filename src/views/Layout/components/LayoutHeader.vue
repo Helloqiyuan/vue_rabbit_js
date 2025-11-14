@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 // 从pinia中获取分类数据
 import { useCategoryStore } from '@/stores/category'
+import HeadCart from './HeadCart.vue';
 const categoryStore = useCategoryStore()
 </script>
 
@@ -31,7 +32,7 @@ const categoryStore = useCategoryStore()
         <input type="text" placeholder="搜一搜">
       </div>
       <!-- 头部购物车 -->
-
+       <HeadCart />
     </div>
   </header>
 </template>
