@@ -44,22 +44,26 @@ export const useCartStore = defineStore(
     const clearCartList = () => {
       cartList.value = [];
     };
-    // 获取总共有多少件商品
+    // 获取总共有多少件商品 sum(count)
     const getTotalCount = () => {
       return cartList.value.reduce((a, c) => a + c.count, 0);
     };
-    // 获取购物车内所有商品的总价格
+    // 获取购物车内所有商品的总价格 sum(e.price * e.count)
     const getTotalPrice = () => {
       return cartList.value.reduce((a, c) => a + c.price * c.count, 0).toFixed(2);
     };
-    // 获取选中商品的总价格
+    // 获取购物车内选中商品的总数量 selected == true => sum(count)
+    const getSelectedCount = () => {
+      return cartList.value.filter((e) => e.selected === true).reduce((a, c) => a + c.count, 0);
+    };
+    // 获取选中商品的总价格 selected == true => sum(e.price * e.count)
     const getSelectedPrice = () => {
-      return cartList.value.reduce((a, c) => a + (c.selected ? c.price * c.count : 0), 0).toFixed(2);
+      return cartList.value
+        .filter((e) => e.selected === true)
+        .reduce((a, c) => a + c.price * c.count, 0)
+        .toFixed(2);
     };
 
-    const getTotalSelected = () => {
-      return cartList.value.reduce((a, c) => a + (c.selected ? c.count : 0), 0);
-    };
     return {
       cartList,
       isAll,
@@ -71,7 +75,7 @@ export const useCartStore = defineStore(
       getTotalCount,
       getSelectedPrice,
       getTotalPrice,
-      getTotalSelected,
+      getSelectedCount,
     };
   },
   {

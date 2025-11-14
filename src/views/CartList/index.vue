@@ -80,7 +80,7 @@ const handleAllCheckBox = (value) => {
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 {{ cartStore.getTotalCount() }} 件商品，已选择 {{ cartStore.getTotalSelected() }} 件，商品合计：
+          共 {{ cartStore.getTotalCount() }} 件商品，已选择 {{ cartStore.getSelectedCount() }} 件，商品合计：
           <span class="red">¥ {{ cartStore.getSelectedPrice() }} </span>
         </div>
         <div class="total">
