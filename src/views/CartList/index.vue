@@ -1,6 +1,10 @@
 <script setup>
 import { useCartStore } from '@/stores/cart';
 const cartStore = useCartStore()
+const handleCheckBoxChange = (value, i) => {
+  cartStore.updateSelected(i.skuId,value)
+}
+console.log("updating...");
 </script>
 
 <template>
@@ -24,7 +28,7 @@ const cartStore = useCartStore()
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox />
+                <el-checkbox :model-value="i.selected" @change="(value) => handleCheckBoxChange(value, i)" />
               </td>
               <td>
                 <div class="goods">
@@ -72,7 +76,7 @@ const cartStore = useCartStore()
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 {{ cartStore.getTotalCount() }} 件商品，已选择 ?? 件，商品合计：
+          共 {{ cartStore.getTotalCount() }} 件商品，已选择 {{ cartStore.getTotalSelected() }} 件，商品合计：
           <span class="red">¥ {{ cartStore.getTotalPrice() }} </span>
         </div>
         <div class="total">
