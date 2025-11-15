@@ -12,6 +12,24 @@ const getAddressData = async () => {
   const res = await getAddressApi()
   curAddress.value = res.result.find(e => e.isDefault === 1)
 }
+
+const dialogVisible = ref(false)
+// 切换地址(dialog)选中的地址
+const selectedAddress = ref({})
+// 切换地址(dialog)点击个地址触发的函数
+const switchAddres = (item) => {
+  selectedAddress.value = item
+}
+// dialog确定
+const confirm = () => {
+  curAddress.value = selectedAddress.value
+  selectedAddress.value = {}
+  dialogVisible.value = false
+}
+// dialog取消
+const cancel = () => {
+  dialogVisible.value = false
+}
 onMounted(() => {
   getAddressData()
   getOrderData()
@@ -35,7 +53,7 @@ onMounted(() => {
               </ul>
             </div>
             <div class="action">
-              <el-button size="large" @click="toggleFlag = true">切换地址</el-button>
+              <el-button size="large" @click="dialogVisible = true">切换地址</el-button>
               <el-button size="large" @click="addFlag = true">添加地址</el-button>
             </div>
           </div>
@@ -116,6 +134,24 @@ onMounted(() => {
     </div>
   </div>
   <!-- 切换地址 -->
+  <el-dialog v-model="dialogVisible" title="切换收货地址" width="30%" center>
+    <div class="addressWrapper">
+      <div class="text item" :class="{ active: selectedAddress.id === item.id }" v-for="item in checkInfo.userAddresses"
+        :key="item.id" @click="switchAddres(item)">
+        <ul>
+          <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
+          <li><span>联系方式：</span>{{ item.contact }}</li>
+          <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
+        </ul>
+      </div>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancel">取消</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <!-- 添加地址 -->
 </template>
 
