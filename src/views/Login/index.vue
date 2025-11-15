@@ -5,8 +5,8 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user';
 const form = ref({
-  account: 'xiaotuxian001',
-  password: '123456',
+  account: '12056258289',
+  password: 'hm#qd@23!',
   agree: false
 })
 const rules = ref({
