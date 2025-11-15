@@ -59,13 +59,16 @@ const router = createRouter({
   ],
   scrollBehavior(to, from, savedPosition) {
     // 在按下 后退/前进 按钮时不会滚动到顶部
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return {
-        top: 0,
-      };
-    }
+    // if (savedPosition) {
+    //   return savedPosition;
+    // } else {
+    //   return {
+    //     top: 0,
+    //   };
+    // }
+    return {
+      top: 0,
+    };
   },
 });
 

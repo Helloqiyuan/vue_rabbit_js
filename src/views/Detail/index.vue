@@ -15,19 +15,19 @@ const getGoodDetailData = async (id) => {
 // 处理Sku组件
 const skuObj = ref({})
 const handleSkuChange = (sku) => {
-  console.log(sku);
+  // console.log(sku);
   skuObj.value = sku
 }
 // 当前商品的数量
 const count = ref(0)
 // 处理商品数量改变
 const handleCount = (count) => {
-  console.log(count);
+  // console.log(count);
 }
 // 处理加入购物车按钮
-const addToCart = () => {
+const addToCart = async() => {
   if (skuObj.value.skuId) {
-    cartStore.addCart({
+    await cartStore.addCart({
       id: goodDetailData.value.id,
       name: goodDetailData.value.name,
       picture: goodDetailData.value.mainPictures[0],
@@ -45,6 +45,7 @@ const addToCart = () => {
 // 处理点击hotDetail时不刷新的问题
 onBeforeRouteUpdate((to) => {
   goodDetailData.value = {}
+  count.value = 0
   getGoodDetailData(to.params.id)
 })
 onMounted(() => {

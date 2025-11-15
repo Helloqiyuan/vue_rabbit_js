@@ -1,6 +1,8 @@
 import { ElMessage } from "element-plus";
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { insertCartApi, getLatestCartApi, deleteCartApi } from "@/apis/cart";
+import { useUserStore } from "./user";
 export const useCartStore = defineStore(
   "cart",
   () => {
@@ -9,12 +11,22 @@ export const useCartStore = defineStore(
       // 找到是否存在未选中的数据 存在返回false 不存在(全选)返回true
       return cartList.value.find((e) => e.selected === false) ? false : true;
     });
-    const addCart = (cart) => {
-      const item = cartList.value.find((e) => e?.skuId === cart.skuId);
-      if (item) {
-        item.count += cart.count;
+    const addCart = async (cart) => {
+      const userStore = useUserStore();
+      const token = userStore.userInfo.token;
+      // 有token就把购物车加入到服务器
+      if (token) {
+        await insertCartApi({ skuId: cart.skuId, count: cart.count });
+        const res = await getLatestCartApi();
+        cartList.value = res.result;
       } else {
-        cartList.value.push(cart);
+        // 没有token暂时把数据存到本地pinia
+        const item = cartList.value.find((e) => e?.skuId === cart.skuId);
+        if (item) {
+          item.count += cart.count;
+        } else {
+          cartList.value.push(cart);
+        }
       }
     };
     // 通过skuId更新selected字段
@@ -31,14 +43,22 @@ export const useCartStore = defineStore(
       cartList.value.forEach((e) => (e.selected = selectedValue));
     };
     // 根据skuId删除数据
-    const deleteCartByskuId = (skuId) => {
+    const deleteCartByskuId = async (skuId) => {
+      const userStore = useUserStore();
+      const token = userStore.userInfo.token;
+      const targetCartName = cartList.value.filter((e) => e.skuId === skuId)[0].name;
+      if (token) {
+        await deleteCartApi([skuId]);
+        const res = await getLatestCartApi();
+        cartList.value = res.result;
+      } else {
+        cartList.value = cartList.value.filter((e) => e.skuId !== skuId);
+      }
       ElMessage({
-        message: `已删除 ${cartList.value.find((e) => e.skuId === skuId).name}`,
+        message: `已删除 ${targetCartName}`,
         type: "success",
-        duration: 5000,
+        duration: 6000,
       });
-
-      cartList.value = cartList.value.filter((e) => e.skuId !== skuId);
     };
     // 清空数据列表
     const clearCartList = () => {
