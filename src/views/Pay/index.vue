@@ -1,12 +1,16 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { getOrderApi } from '@/apis/pay'
+import { useCountDown } from '@/composables/useCountDown'
 const payInfo = ref({})
 const props = defineProps(['id'])
+const countDown = useCountDown()
+
 const getOrderData = async (id) => {
   const res = await getOrderApi(id)
   payInfo.value = res.result
-  console.log(payInfo.value);
+  // 调用倒计时函数
+  countDown.startAt(res.result.countdown)
 }
 // 支付宝相关
 // 支付地址
@@ -15,8 +19,8 @@ const backURL = 'http://127.0.0.1:5173/paycallback'
 const redirectUrl = encodeURIComponent(backURL)
 const payUrl = `${baseURL}pay/aliPay?orderId=${props.id}&redirect=${redirectUrl}`
 
+// 剩余时间
 onMounted(() => {
-  console.log(props.id);
   getOrderData(props.id)
 })
 </script>
@@ -27,10 +31,15 @@ onMounted(() => {
     <div class="container">
       <!-- 付款信息 -->
       <div class="pay-info">
-        <span class="icon iconfont icon-queren2"></span>
-        <div class="tip">
+        <span class="icon iconfont icon-queren2" v-if="countDown.time.value > 0"></span>
+        <span class="icon iconfont icon-shanchu red" v-else-if="payInfo.id && countDown.time.value <= 0"></span>
+        <div class="tip" v-if="countDown.time.value > 0">
           <p>订单提交成功！请尽快完成支付。</p>
-          <p>支付还剩 <span>24分30秒</span>, 超时后将取消订单</p>
+          <p>支付还剩 <span>{{ countDown.formatTime }}</span>, 超时后将取消订单</p>
+        </div>
+        <div class="tip" v-else-if="payInfo.id">
+          <p>订单已超时！</p>
+          <p></p>
         </div>
         <div class="amount">
           <span>应付总额：</span>
@@ -74,6 +83,10 @@ onMounted(() => {
   .icon {
     font-size: 80px;
     color: #1dc779;
+  }
+
+  .red {
+    color: $priceColor;
   }
 
   .tip {
