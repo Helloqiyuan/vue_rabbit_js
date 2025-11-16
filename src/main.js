@@ -1,7 +1,7 @@
 // import './assets/main.css'
 // 引入自定义css样式
 import "@/styles/common.scss";
-
+import "@/styles/nprogress.scss"
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";

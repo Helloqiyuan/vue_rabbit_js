@@ -3,6 +3,8 @@ import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
 import { useUserStore } from "@/stores/user";
 import router from "@/router";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 const httpInstance = axios.create({
   baseURL: "http://pcapi-xiaotuxian-front-devtest.itheima.net",
   timeout: 20000,
@@ -11,6 +13,7 @@ const httpInstance = axios.create({
 // axios请求拦截器
 httpInstance.interceptors.request.use(
   (config) => {
+    NProgress.start();
     const userStore = useUserStore();
     const token = userStore.userInfo.token;
     if (token) {
@@ -23,7 +26,10 @@ httpInstance.interceptors.request.use(
 
 // axios响应式拦截器
 httpInstance.interceptors.response.use(
-  (res) => res.data,
+  (res) => {
+    NProgress.done();
+    return res.data;
+  },
   (e) => {
     const userStore = useUserStore();
     ElMessage.warning(e.response.data.message);
@@ -33,6 +39,7 @@ httpInstance.interceptors.response.use(
       userStore.ClearUserInfo();
       router.push("/login");
     }
+    NProgress.done();
     return Promise.reject(e);
   }
 );
